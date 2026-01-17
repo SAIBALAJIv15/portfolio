@@ -16,7 +16,7 @@ export const AboutSection = () => {
             </h3>
 
             <p className="text-muted-foreground">
-             Computer science engineering student graduate who excelled with strong knowledge in full-stack development: front-end with HTML, CSS, and JavaScript; React.js; back-end with Node.js.
+             Computer science engineering student graduate who excelled with strong knowledge in full-stack development: front-end with HTML, CSS : back-end with Springboot.
               Looking to apply my skills in a dynamic environment and be able to contribute and grow with a forward-thinking development team
             </p>
 

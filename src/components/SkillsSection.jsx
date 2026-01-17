@@ -1,5 +1,33 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { StarBackground } from "./StarBackground";
+
+const skillIcons = {
+  "HTML/CSS": (
+    <svg width="28" height="28" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="6" fill="#E44D26"/><text x="16" y="21" textAnchor="middle" fontSize="15" fill="#fff" fontWeight="bold">&lt;/&gt;</text></svg>
+  ),
+  "Java": (
+    <svg width="28" height="28" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="6" fill="#007396"/><text x="16" y="21" textAnchor="middle" fontSize="15" fill="#fff" fontWeight="bold">J</text></svg>
+  ),
+  "Springboot": (
+    <svg width="28" height="28" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="6" fill="#6DB33F"/><text x="16" y="21" textAnchor="middle" fontSize="15" fill="#fff" fontWeight="bold">S</text></svg>
+  ),
+  "SQL": (
+    <svg width="28" height="28" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="6" fill="#336791"/><text x="16" y="21" textAnchor="middle" fontSize="15" fill="#fff" fontWeight="bold">DB</text></svg>
+  ),
+  "Git/GitHub": (
+    <svg width="28" height="28" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="6" fill="#181717"/><text x="16" y="21" textAnchor="middle" fontSize="15" fill="#fff" fontWeight="bold">Git</text></svg>
+  ),
+  "Figma": (
+    <svg width="28" height="28" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="6" fill="#F24E1E"/><text x="16" y="21" textAnchor="middle" fontSize="15" fill="#fff" fontWeight="bold">F</text></svg>
+  ),
+  "VS Code": (
+    <svg width="28" height="28" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="6" fill="#007ACC"/><text x="16" y="21" textAnchor="middle" fontSize="15" fill="#fff" fontWeight="bold">VS</text></svg>
+  ),
+  "Canva": (
+    <svg width="28" height="28" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="6" fill="#00C4CC"/><text x="16" y="21" textAnchor="middle" fontSize="15" fill="#fff" fontWeight="bold">C</text></svg>
+  ),
+};
 
 const skills = [
   // Frontend
@@ -33,8 +61,9 @@ export const SkillsSection = () => {
     (skill) => activeCategory === "all" || skill.category === activeCategory
   );
   return (
-    <section id="skills" className="py-24 px-4 relative bg-secondary/30">
-      <div className="container mx-auto max-w-5xl">
+    <section id="skills" className="py-24 px-4 relative bg-secondary/30 overflow-hidden">
+      <StarBackground />
+      <div className="container mx-auto max-w-5xl relative z-10">
         <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center">
           My <span className="text-primary"> Skills</span>
         </h2>
@@ -43,39 +72,55 @@ export const SkillsSection = () => {
           {categories.map((category, key) => (
             <button
               key={key}
-              onClick={() => setActiveCategory(category)}
+              onClick={e => {
+                const btn = e.currentTarget;
+                const ripple = document.createElement('span');
+                const rect = btn.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                ripple.className = 'ripple-effect';
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
+                ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
+                btn.appendChild(ripple);
+                setTimeout(() => ripple.remove(), 600);
+                setActiveCategory(category);
+              }}
               className={cn(
-                "px-5 py-2 rounded-full transition-colors duration-300 capitalize",
+                "cosmic-button capitalize text-base ripple",
                 activeCategory === category
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-secondary/70 text-forefround hover:bd-secondary"
+                  ? "shadow-md scale-105"
+                  : "bg-secondary/70 text-foreground hover:bg-primary/20"
               )}
+              style={{ minWidth: 110, position: 'relative' }}
             >
               {category}
             </button>
           ))}
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredSkills.map((skill, key) => (
             <div
               key={key}
-              className="bg-card p-6 rounded-lg shadow-xs card-hover"
+              className="card-hover p-7 rounded-2xl bg-card/90 shadow-md border border-primary/10 flex flex-col justify-between min-h-[140px]"
+              style={{ transition: 'box-shadow 0.3s, transform 0.3s' }}
             >
-              <div className="text-left mb-4">
-                <h3 className="font-semibold text-lg"> {skill.name}</h3>
-              </div>
-              <div className="w-full bg-secondary/50 h-2 rounded-full overflow-hidden">
-                <div
-                  className="bg-primary h-2 rounded-full origin-left animate-[grow_1.5s_ease-out]"
-                  style={{ width: skill.level + "%" }}
-                />
-              </div>
-
-              <div className="text-right mt-1">
-                <span className="text-sm text-muted-foreground">
-                  {skill.level}%
-                </span>
+              <div className="card-tilt">
+                <div className="flex items-center gap-3 mb-4">
+                  <span className="block animate-bounce" style={{ animationDuration: (1.2 + key * 0.1) + 's' }}>{skillIcons[skill.name]}</span>
+                  <h3 className="font-semibold text-xl tracking-wide text-primary/90">{skill.name}</h3>
+                </div>
+                <div className="w-full bg-secondary/40 h-3 rounded-full overflow-hidden shimmer">
+                  <div
+                    className="bg-primary h-3 rounded-full transition-all duration-700 skill-progress-bar animated-gradient"
+                    style={{ width: skill.level + '%', boxShadow: '0 0 8px 1px rgba(139,92,246,0.12)' }}
+                  />
+                </div>
+                <div className="text-right mt-2">
+                  <span className="text-sm font-semibold text-primary/70">
+                    {skill.level}%
+                  </span>
+                </div>
               </div>
             </div>
           ))}

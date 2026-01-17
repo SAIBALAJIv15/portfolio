@@ -18,7 +18,7 @@ export const HeroSection = () => {
           </h1>
 
           <p className="text-lg md:text-xl text-muted-foreground max-2-2xl mx-auto opacity-0 animate-fade-in-delay-3">
-           Computer science engineering graduate who excelled with strong knowledge in  front-end with HTML, CSS, and JavaScript; React.js.
+           Computer science engineering graduate who excelled with strong knowledge in  front-end with HTML, CSS; back-end with Springboot.
             Looking to apply my skills in a dynamic environment and be able to contribute and grow with a forward-thinking development team.
           </p>
 
